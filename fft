@@ -104,5 +104,36 @@ string big_int_pow(string s, int p) {
          p >>= 1;
       }
       return ans;
+}
+ vector<int> str_match(const string& s, const string& patt) {
+      int n = s.size(), m = patt.size();
+      vector<int> poly1(n), poly2(m);
+      vector<int> ans_match(n);
+      int shift = m - 1;
+      for (int i = 0; i < 26; ++i) {
+         for (int j = 0; j < n; ++j) {
+            poly1[j] = (s[j] - 'a') == i;
+         }
+         for (int j = 0; j < m; ++j) {
+            poly2[j] = (patt[-j + shift] - 'a') == i;
+         }
+         vector<int> ans = multiply(poly1, poly2);
+         for (int j = 0; j < n; ++j) {
+            ans_match[j] += ans[j + shift];
+         }
+      }
+      return ans_match;
+   }
+   vector<int> wild_card_cnt(const string& s, const string& patt) {
+      int n = s.size(), m = patt.size();
+      vector<int> ans_match = str_match(s, patt);
+      vector<int> pos;
+      int wild_cnt = count(patt.begin(), patt.end(), '*');
+      for (int i = 0; i < n; ++i) {
+         if (ans_match[i] == m - wild_cnt) {
+            pos.push_back(i);
+         }
+      }
+      return pos;
    }
 
